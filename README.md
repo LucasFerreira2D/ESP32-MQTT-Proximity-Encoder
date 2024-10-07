@@ -42,6 +42,8 @@ O display LCD exibe as informações sobre a distância medida, a posição do e
 ![image](https://github.com/user-attachments/assets/5c61bd90-b8c9-4023-a011-d4c03eeeca79)
 
 
+https://wokwi.com/projects/411086077824230401
+
 ![image](https://github.com/user-attachments/assets/10f4ae60-7706-4ef4-9ff1-579e9a0cd724)
 
 **2. Software - Configuração e Instalação**
