@@ -124,6 +124,3 @@ mosquitto_sub -h broker.hivemq.com -t ESP32_PROXIMIDADE_IOT_IFSP
 
 **Assinando o tópico de giro:**
 mosquitto_sub -h broker.hivemq.com -t ESP32_GIRO_IOT_IFSP
-
-
-
