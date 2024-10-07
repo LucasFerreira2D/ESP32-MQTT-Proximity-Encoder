@@ -3,8 +3,12 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-// Definir o endereço do display I2C (normalmente 0x27 ou 0x3F)
-LiquidCrystal_I2C lcd(0x27, 16, 2);  // Endereço do display, 16 colunas e 2 linhas
+// Configuração do display I2C
+#define I2C_ADDR    0x27
+#define LCD_COLUMNS 16
+#define LCD_LINES   2
+
+LiquidCrystal_I2C lcd(I2C_ADDR, LCD_COLUMNS, LCD_LINES);
 
 // Definir pinos do sensor HC-SR04
 #define TRIG_PIN 5   // Pino TRIG do sensor HC-SR04
@@ -85,6 +89,12 @@ void readEncoder() {
     // Enviar a leitura do encoder via MQTT
     String message = String(counter);
     MQTT.publish(TOPICO_PUBLISH_GIRO, message.c_str());
+
+    // Exibir a posição do encoder na linha 2 do display
+    lcd.setCursor(0, 1);
+    lcd.print("Encoder: ");
+    lcd.print(counter);
+    lcd.print("   "); // Limpar caracteres adicionais
   }
 
   // Verificar se o botão do encoder foi pressionado (zerar contador)
@@ -95,6 +105,10 @@ void readEncoder() {
     // Enviar o valor zero via MQTT
     String message = String(counter);
     MQTT.publish(TOPICO_PUBLISH_GIRO, message.c_str());
+
+    // Exibir no display
+    lcd.setCursor(0, 1);
+    lcd.print("Encoder: 0   ");
 
     delay(500);  // Debounce para evitar múltiplas leituras rápidas
   }
@@ -120,8 +134,9 @@ void setup()
     lastStateCLK = digitalRead(CLK);
 
     // Inicializar o display LCD I2C
-    lcd.begin(16, 2);
-    lcd.backlight();
+    Wire.begin(23, 22);  // Configurar manualmente os pinos SDA (23) e SCL (22)
+    lcd.init();          // Inicializar o display LCD
+    lcd.backlight();     // Ativar a luz de fundo
     lcd.setCursor(0, 0);
     lcd.print("Iniciando...");
 }
@@ -136,7 +151,7 @@ void init_wifi(void)
     delay(10);
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print("Conectando Wi-Fi");
+    lcd.print("Conectando WiFi");
     lcd.setCursor(0, 1);
     lcd.print(SSID);
     Serial.println("------Conexao WI-FI------");
@@ -240,12 +255,13 @@ void loop()
             Serial.print(distance);
             Serial.println(" cm");
 
-            lcd.clear();
+            // Exibir a distância na linha 1 do display
             lcd.setCursor(0, 0);
             lcd.print("Dist: ");
             lcd.print(distance);
-            lcd.print(" cm");
+            lcd.print(" cm   "); // Limpar caracteres adicionais
 
+            // Enviar a distância via MQTT
             String mensagem = String(distance);
             MQTT.publish(TOPICO_PUBLISH_PROXIMIDADE, mensagem.c_str());
 
@@ -258,3 +274,4 @@ void loop()
 
     MQTT.loop();
 }
+
