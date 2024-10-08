@@ -1,4 +1,4 @@
-**Home - Projeto ESP32: Sensor de Proximidade, Encoder e Display LCD com MQTT**
+**Projeto ESP32: Sensor de Proximidade, Encoder e Display LCD com MQTT**
 
 
 Descrição do Projeto
